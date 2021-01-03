@@ -1,0 +1,103 @@
+<template>
+	<view class="container" :style="{'height': windowHeight}">
+		<view class="products">
+			<view v-for="(item,index) in arrProduct" :key="index" class="product_item" @click="goto(item)">
+				{{item}}
+			</view>
+		</view>
+		
+		<view class="new" @click="add">+</view>
+	</view>
+</template>
+
+<script>
+	export default {
+		data() {
+			return {
+				windowHeight: 0,
+				arrProduct: ['A4', 'A7', 'ES1', 'SL4']
+			}
+		},
+		onLoad() {
+			uni.getSystemInfo({
+				success: (res) => {
+					this.windowHeight = res.windowHeight + "px";
+					//console.log(this.windowHeight);
+				}
+			})
+		},
+		methods: {
+			goto: function(page) {
+				//console.log(page);
+				uni.navigateTo({
+				    url: '../bugs/bugs?page=' + page
+				});
+			},
+			add: function() {
+				uni.navigateTo({
+				    url: '../bug_edit/bug_edit?page=A4&item=' + null
+				});
+			}
+		}
+	}
+</script>
+
+<style>
+	.container {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+
+	.products {
+		display: flex;
+		align-items: center;
+		flex-direction: row;
+		justify-content: space-evenly;
+		flex-wrap: wrap;
+
+		width: 80%;
+		height: 80%;
+		font-size: 60rpx;
+		border-radius: 20rpx;
+		background-color: #f3f3f3;
+	}
+
+	.product_item {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+
+		width: 150rpx;
+		height: 150rpx;
+		border-radius: 100%;
+		margin: 30rpx;
+		padding: 30rpx;
+		background-color: #FFFFFF;
+	}
+
+	.product_item:hover {
+		background-color: #2196f3;
+		color: #FFFFFF;
+	}
+	
+	.new {
+		display: flex;
+		justify-content: center;
+		
+		position: absolute;
+		bottom: 20px;
+		
+		color: #FFFFFF;
+		width: 120rpx;
+		height: 120rpx;
+		border-radius: 100%;
+		background-color: #2196F3;
+		font-size: 100rpx;
+		line-height: 105rpx;
+	}
+	.new:hover {
+		background-color: #4CD964;
+		color: #FFFFFF;
+	}
+</style>
