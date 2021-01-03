@@ -55,11 +55,17 @@
 			<view class="uni-list-cell">
 				<view class="uni-list-cell-left">描述</view>
 				<textarea class="uni-list-cell-db" style="height: 150rpx;" v-model="bug.remarks" />
-			</view>
+				</view>
 			
 			<view class="uni-list-cell">
 				<view class="uni-list-cell-left">上传文件 </view>
-				<input class="uni-list-cell-db" name="input" placeholder="" @click="uploadFile" v-model="bug.attachments" />
+				<view class="addImage" @click="uploadFile">
+					+
+				</view>
+			</view>
+			<view class="uni-list-cell">
+				<view class="uni-list-cell-left"></view>
+				<image v-for="(item, index) in bug.attachments" :key="index" :src="item.fileID" class="img" @click="previewImage(index)"></image>
 			</view>
 			
 			<view class="uni-list-cell">
@@ -93,7 +99,7 @@
 					version: '',
 					title: '',
 					remarks: '',
-					attachments: '',
+					attachments: [],
 					status: '',
 					
 					_id: '',
@@ -123,6 +129,7 @@
 			this.init();
 			this.bug.project = option.page;
 			if (option.item != 'null') {
+				//console.log(decodeURIComponent(option.item));
 				this.bug = JSON.parse(decodeURIComponent(option.item));
 			}
 		},
@@ -137,7 +144,7 @@
 				this.bug.version = "";
 				this.bug.title = "";
 				this.bug.remarks = "";
-				this.bug.attachments = "";
+				this.bug.attachments = [];
 				this.bug.status = this.arrStatus[0];
 				
 				this.bug._id = "";
@@ -191,7 +198,10 @@
 					success(res) {
 						if (that.bug._id == '')
 							that.bug._id = res.result.data;
-						//console.log(JSON.stringify(res));
+						uni.showToast({
+							title:"Submit successful.",
+							icon:'none'
+						})
 					},
 					fail(e) {
 						console.error(e);
@@ -221,10 +231,11 @@
 								cloudPath: cloudPath,
 				                success(e) {
 									if (e.success) {
-										console.log(e.fileID);
+										var file = {fileID: e.fileID};
+										that.bug.attachments.push(file);
 									} else {
 										uni.showToast({
-											title:"上传文件失败",
+											title:"Upload file failure.",
 											icon:'none'
 										})
 									}
@@ -239,6 +250,16 @@
 							uni.showLoading();
 				        }
 				    }
+				});
+			},
+			previewImage: function(index) {
+				var arr = [];
+				for (var i=0; i<this.bug.attachments.length; i++) {
+					arr.push(this.bug.attachments[i].fileID);
+				}
+				uni.previewImage({
+					urls: arr,
+					current: index
 				});
 			},
 			dateFormat: function(fmt, date) {
@@ -292,5 +313,22 @@
 		padding: 10rpx;
 		border-radius: 10rpx;
 		border: 1px solid #C0C0C0;
+	}
+	
+	.img {
+		width: 150rpx;
+		height: 150rpx;
+		border-radius: 10rpx;
+		margin-right: 20rpx;
+	}
+	.addImage {
+		width: 70rpx; 
+		height: 70rpx;
+		line-height: 70rpx;
+		font-size: 60rpx;
+		border-radius: 10rpx;
+		background-color: #FFFFFF;
+		border: 1px solid #C0C0C0;
+		text-align: center;
 	}
 </style>

@@ -50,9 +50,9 @@
 				uniCloud.callFunction({
 					name: "get_list_bug",
 					data: {
-						pageIndex: 1,
-						pageSize: 10,
-						filter: {}
+						pageIndex: pageIndex,
+						pageSize: pageSize,
+						filter: {"project": that.project}
 					},
 					success(res) {
 						that.arrData = res.result.data;
@@ -75,8 +75,8 @@
 
 <style>
 	.container {
-		padding: 20rpx;
-		font-size: 32rpx;
+		padding: 10rpx;
+		font-size: 26rpx;
 	}
 	
 	.header {

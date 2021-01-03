@@ -57,7 +57,7 @@
 		flex-wrap: wrap;
 
 		width: 80%;
-		height: 80%;
+		height: 60%;
 		font-size: 60rpx;
 		border-radius: 20rpx;
 		background-color: #f3f3f3;
@@ -86,7 +86,7 @@
 		justify-content: center;
 		
 		position: absolute;
-		bottom: 20px;
+		bottom: 50rpx;
 		
 		color: #FFFFFF;
 		width: 120rpx;
@@ -94,7 +94,7 @@
 		border-radius: 100%;
 		background-color: #2196F3;
 		font-size: 100rpx;
-		line-height: 105rpx;
+		line-height: 110rpx;
 	}
 	.new:hover {
 		background-color: #4CD964;
