@@ -33,7 +33,7 @@
 			this.project = option.page;
 			if (option.page != 'null') {
 				uni.setNavigationBarTitle({
-				　　title: 'Bugs [' + option.page + ']'
+				　　title: 'Bug Tracker [' + option.page + ']'
 				})
 			}
 			this.loadDataOnLine(1, 100);

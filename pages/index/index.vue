@@ -5,7 +5,7 @@
 				{{item}}
 			</view>
 		</view>
-		
+
 		<view class="new" @click="add">+</view>
 	</view>
 </template>
@@ -30,12 +30,19 @@
 			goto: function(page) {
 				//console.log(page);
 				uni.navigateTo({
-				    url: '../bugs/bugs?page=' + page
+					url: '../bugs/bugs?page=' + page
 				});
 			},
 			add: function() {
 				uni.navigateTo({
-				    url: '../bug_edit/bug_edit?page=A4&item=' + null
+					url: '../bug_edit/bug_edit?page=A4&item=' + null
+				});
+			},
+			onNavigationBarButtonTap: function(e) {
+				console.log(e.text);
+				console.log(e.fontSize);
+				uni.navigateTo({
+					url: '../about/about'
 				});
 			}
 		}
@@ -80,14 +87,14 @@
 		background-color: #2196f3;
 		color: #FFFFFF;
 	}
-	
+
 	.new {
 		display: flex;
 		justify-content: center;
-		
+
 		position: absolute;
 		bottom: 50rpx;
-		
+
 		color: #FFFFFF;
 		width: 120rpx;
 		height: 120rpx;
@@ -96,6 +103,7 @@
 		font-size: 100rpx;
 		line-height: 110rpx;
 	}
+
 	.new:hover {
 		background-color: #4CD964;
 		color: #FFFFFF;

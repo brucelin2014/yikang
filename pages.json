@@ -2,25 +2,42 @@
 	"pages": [{
 		"path": "pages/index/index",
 		"style": {
-			"navigationBarTitleText": "Bugs"
+			"navigationBarTitleText": "Bug Tracker",
+			"app-plus": {
+				"titleNView": {
+					"buttons": [{
+						"fontSrc": "/static/iconfont.ttf",
+						"text": "\ue648",
+						"type": "none",
+						"color": "rgb(0,0,0)",
+						"fontSize": "22px",
+						"float": "right"
+					}]
+				}
+			}
 		}
 	}, {
 		"path": "pages/bugs/bugs",
 		"style": {
-			"navigationBarTitleText": "Bugs",
+			"navigationBarTitleText": "Bug Tracker",
 			"enablePullDownRefresh": false
 		}
 
-	}    ,{
-            "path" : "pages/bug_edit/bug_edit",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "Bugs",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-    ],
+	}, {
+		"path": "pages/bug_edit/bug_edit",
+		"style": {
+			"navigationBarTitleText": "Bug Tracker",
+			"enablePullDownRefresh": false
+		}
+
+	}, {
+		"path": "pages/about/about",
+		"style": {
+			"navigationBarTitleText": "About",
+			"enablePullDownRefresh": false
+		}
+
+	}],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "yikang",
