@@ -58,7 +58,7 @@
 				</view>
 			
 			<view class="uni-list-cell">
-				<view class="uni-list-cell-left">上传文件 </view>
+				<view class="uni-list-cell-left">上传图片 </view>
 				<view class="addImage" @click="uploadFile">
 					+
 				</view>
@@ -75,6 +75,16 @@
 						<view class="uni-input">{{bug.status}}</view>
 					</picker>
 				</view>
+			</view>
+			
+			<view class="uni-list-cell">
+				<view class="uni-list-cell-left">报告员</view>
+				<input class="uni-list-cell-db" name="input" placeholder="" v-model="bug.Bruce" />
+			</view>
+			
+			<view class="uni-list-cell">
+				<view class="uni-list-cell-left">分派给</view>
+				<input class="uni-list-cell-db" name="input" placeholder="" v-model="bug.assigned" />
 			</view>
 		</view>
 
@@ -101,6 +111,9 @@
 					remarks: '',
 					attachments: [],
 					status: '',
+					
+					submitter: 'Bruce',
+					assigned: 'Bruce',
 					
 					_id: '',
 					created_date: '',
@@ -147,6 +160,9 @@
 				this.bug.attachments = [];
 				this.bug.status = this.arrStatus[0];
 				
+				this.bug.submitter = "Bruce";
+				this.bug.assigned = "Bruce";
+				
 				this.bug._id = "";
 				this.bug.created_date = "";
 				this.bug.last_modified_date = "";
@@ -190,6 +206,9 @@
 						remarks: that.bug.remarks,
 						attachments: that.bug.attachments,
 						status: that.bug.status,
+						
+						submitter: that.bug.submitter,
+						assigned: that.bug.assigned,
 						
 						_id: that.bug._id,
 						created_date: that.bug.created_date,

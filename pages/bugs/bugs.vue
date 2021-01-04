@@ -8,13 +8,10 @@
 			</tr>
 			<tr v-for="(item,index) in arrData" :key="index" :class="index % 2 == 0 ? 'content' : 'content2'" @click="edit(item)">
 				<td style="padding: 10rpx;">{{item.type}}</td>
-				<td style="padding: 10rpx;">{{item.frequency}}</td>
 				<td style="padding: 10rpx;">{{item.ponderance}}</td>
-				<td style="padding: 10rpx;">{{item.priority}}</td>
-				
-				<td style="padding: 10rpx;">{{item.version}}</td>
-				<td style="padding: 10rpx;">{{item.title}}</td>
 				<td style="padding: 10rpx;">{{item.status}}</td>
+				<td style="padding: 10rpx;">{{substrDate(item.last_modified_date)}}</td>
+				<td style="padding: 10rpx;">{{item.title}}</td>
 			</tr>
 		</table>
 	</view>
@@ -24,7 +21,7 @@
 	export default {
 		data() {
 			return {
-				arrHeader:['分类','出现频率','严重性','优先级','产品版本','摘要','状态'],
+				arrHeader:['分类','严重性','状态','最后更新','摘要'],
 				project:'',
 				arrData: []
 			}
@@ -67,6 +64,10 @@
 				});
 				uni.showLoading();
 			},
+			substrDate: function(datetime) {
+				var index = datetime.indexOf(' ');
+				return datetime.substr(0, index);
+			}
 			
 		}
 		
