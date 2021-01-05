@@ -79,7 +79,7 @@
 			
 			<view class="uni-list-cell">
 				<view class="uni-list-cell-left">报告员</view>
-				<input class="uni-list-cell-db" name="input" placeholder="" v-model="bug.Bruce" />
+				<input class="uni-list-cell-db" name="input" placeholder="" v-model="bug.submitter" />
 			</view>
 			
 			<view class="uni-list-cell">
@@ -349,5 +349,9 @@
 		background-color: #FFFFFF;
 		border: 1px solid #C0C0C0;
 		text-align: center;
+	}
+	
+	.uni-btn-v{
+		display: flex;
 	}
 </style>

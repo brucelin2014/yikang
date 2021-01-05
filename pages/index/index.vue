@@ -14,11 +14,14 @@
 	export default {
 		data() {
 			return {
+				user: '',
 				windowHeight: 0,
 				arrProduct: ['A4', 'A7', 'ES1', 'SL4']
 			}
 		},
-		onLoad() {
+		onLoad(option) {
+			this.user = option.user;
+			console.log(this.user);
 			uni.getSystemInfo({
 				success: (res) => {
 					this.windowHeight = res.windowHeight + "px";

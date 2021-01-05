@@ -30,6 +30,9 @@ exports.main = async (event, context) => {
 			"attachments": event.attachments,
 			"status": event.status,
 			
+			"submitter": event.submitter,
+			"assigned": event.assigned,
+			
 			//"created_date": event.created_date,
 			"last_modified_date": event.last_modified_date
 		});
@@ -48,6 +51,9 @@ exports.main = async (event, context) => {
 			"remarks": event.remarks,
 			"attachments": event.attachments,
 			"status": event.status,
+			
+			"submitter": event.submitter,
+			"assigned": event.assigned,
 			
 			"created_date": event.created_date,
 			"last_modified_date": event.last_modified_date

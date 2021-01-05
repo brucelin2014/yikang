@@ -6,19 +6,68 @@
 				<a href="http://demo.mantisbt.org/" target="_blank">Mantis Bug Tracker</a>开发
 			</view>
 			<view>版本: V1.0.0</view>
+			<view>安卓APP: 扫码下载</view>
+			<view class="qrimg">
+			    <tki-qrcode
+			    ref="qrcode"
+			    :val="val"
+			    :size="size"
+			    :background="background"
+			    :foreground="foreground"
+			    :pdground="pdground"
+			    :lv="lv"
+			    :onval="onval"
+			    :loadMake="loadMake" />
+			</view>
 		</view>
 	</view>
 </template>
 
 <script>
+	import tkiQrcode from '@/components/tki-qrcode/tki-qrcode.vue'
 	export default {
+		comments: {
+			tkiQrcode
+		},
 		data() {
 			return {
-
+				val: '',
+				size: 200,
+				background: '#ffffff',
+				foreground: '#000000',
+				pdground: '#000000',
+				icon: '',
+				iconsize: '45',
+				lv: 1,
+				onval: true,
+				loadMake: true,
+				src: ''
 			}
 		},
+		onLoad(option) {
+			this.loadDataOnLine();
+		},
 		methods: {
-
+			// 查找云端数据
+			loadDataOnLine: function() {
+				var that = this;
+				uniCloud.callFunction({
+					name: "get_settings",
+					data: {
+					},
+					success(res) {
+						that.val = res.result.data[0].download_path;
+						//console.log(that.val);
+					},
+					fail(e) {
+						console.error(e);
+					},
+					complete() {
+						uni.hideLoading();
+					}
+				});
+				uni.showLoading();
+			},
 		}
 	}
 </script>
