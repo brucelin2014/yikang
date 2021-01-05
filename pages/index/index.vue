@@ -6,7 +6,12 @@
 			</view>
 		</view>
 
-		<view class="new" @click="add">+</view>
+		<view class="quick_menu">
+			<view class="report" @click="report">◕</view>
+			<view class="new" @click="add">+</view>
+			<view class="download" @click="download">🠗</view>
+		</view>
+
 	</view>
 </template>
 
@@ -41,6 +46,18 @@
 					url: '../bug_edit/bug_edit?page=A4&item=' + null
 				});
 			},
+			report: function() {
+				uni.showToast({
+					icon:'none',
+					title:'Please look forward.'
+				})
+			},
+			download: function() {
+				uni.showToast({
+					icon:'none',
+					title:'Please look forward.'
+				})
+			},
 			onNavigationBarButtonTap: function(e) {
 				console.log(e.text);
 				console.log(e.fontSize);
@@ -71,6 +88,7 @@
 		font-size: 60rpx;
 		border-radius: 20rpx;
 		background-color: #f3f3f3;
+		margin-bottom: 10%;
 	}
 
 	.product_item {
@@ -91,23 +109,43 @@
 		color: #FFFFFF;
 	}
 
-	.new {
+	.quick_menu {
 		display: flex;
 		justify-content: center;
+		align-items: center;
 
 		position: absolute;
+		width: 80%;
 		bottom: 50rpx;
+	}
+
+	.new,
+	.report,
+	.download {
+		display: flex;
+		justify-content: center;
 
 		color: #FFFFFF;
 		width: 120rpx;
 		height: 120rpx;
 		border-radius: 100%;
-		background-color: #2196F3;
+		background-color: #999999;
 		font-size: 100rpx;
 		line-height: 110rpx;
+		margin-left: 5%;
+		margin-right: 5%;
 	}
 
-	.new:hover {
+	.new {
+		width: 140rpx;
+		height: 140rpx;
+		line-height: 130rpx;
+		background-color: #2196F3;
+	}
+
+	.new:hover,
+	.report:hover,
+	.download:hover {
 		background-color: #4CD964;
 		color: #FFFFFF;
 	}

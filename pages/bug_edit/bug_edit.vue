@@ -12,7 +12,11 @@
 
 			<view class="uni-list-cell">
 				<view class="uni-list-cell-left">分类</view>
-				<input class="uni-list-cell-db" name="input" placeholder="" v-model="bug.type" />
+				<view class="uni-list-cell-db">
+					<picker @change="bindTypeChange" :value="index_Type" :range="arrType">
+						<view class="uni-input">{{bug.type}}</view>
+					</picker>
+				</view>
 			</view>
 
 			<view class="uni-list-cell">
@@ -86,11 +90,13 @@
 				<view class="uni-list-cell-left">分派给</view>
 				<input class="uni-list-cell-db" name="input" placeholder="" v-model="bug.assigned" />
 			</view>
-		</view>
-
-		<view class="uni-btn-v">
-			<button type="default" @click="save">Submit</button>
-			<button type="default" @click="clear">Reset</button>
+			
+			<view class="uni-list-cell">
+				<view class="uni-btn-v">
+					<button style="width: 40%;" type="default" @click="save">Submit</button>
+					<button style="width: 40%;" type="default" @click="clear">New</button>
+				</view>
+			</view>
 		</view>
 	</view>
 </template>
@@ -121,6 +127,7 @@
 				},
 				
 				index_Product: 0,
+				index_Type: 0,
 				index_Frequency: 0,
 				index_Ponderance: 0,
 				index_Priority: 0,
@@ -128,6 +135,8 @@
 				
 				// 项目
 				arrProduct: ['A4', 'A7', 'ES1', 'SL4'],
+				// 類型
+				arrType: ['中文简体', '中文繁體', 'English'],
 				// 出现频率
 				arrFrequency: ['总是', '有时', '随机', '没有试验', '无法重现', '不适用'],
 				// 严重性
@@ -141,15 +150,15 @@
 		onLoad(option) {
 			this.init();
 			this.bug.project = option.page;
-			if (option.item != 'null') {
-				//console.log(decodeURIComponent(option.item));
+			if (option.item != 'null' && option.item != undefined) {
+				console.log(decodeURIComponent(option.item));
 				this.bug = JSON.parse(decodeURIComponent(option.item));
 			}
 		},
 		methods: {
 			init: function() {
 				this.bug.project = this.arrProduct[0];
-				this.bug.type = "";
+				this.bug.type = this.arrType[0];
 				this.bug.frequency = this.arrFrequency[0];
 				this.bug.ponderance = this.arrPonderance[0];
 				this.bug.priority = this.arrPriority[0];
@@ -170,6 +179,10 @@
 			bindProductChange: function(e) {
 				this.index_Product = e.target.value;
 				this.bug.project = this.arrProduct[this.index_Product];
+			},
+			bindTypeChange: function(e) {
+				this.index_Type = e.target.value;
+				this.bug.type = this.arrType[this.index_Type];
 			},
 			bindFrequencyChange: function(e) {
 				this.index_Frequency = e.target.value;
@@ -353,5 +366,7 @@
 	
 	.uni-btn-v{
 		display: flex;
+		margin: 10rpx;
+		width: 100%;
 	}
 </style>

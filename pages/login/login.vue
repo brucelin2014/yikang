@@ -8,7 +8,7 @@
 
 			<view class="uni-btn-v">
 				<button type="default" @click="login">Login</button>
-				<button type="default" @click="clear">Reset</button>
+				<button type="default" @click="clear">Clear</button>
 			</view>
 		</view>
 	</view>
