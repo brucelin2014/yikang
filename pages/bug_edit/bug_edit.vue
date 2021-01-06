@@ -76,7 +76,7 @@
 				<view class="uni-list-cell-left">状态</view>
 				<view class="uni-list-cell-db">
 					<picker @change="bindStatusChange" :value="index_Status" :range="arrStatus">
-						<view class="uni-input">{{bug.status}}</view>
+						<view :class="status_class">{{bug.status}}</view>
 					</picker>
 				</view>
 			</view>
@@ -132,6 +132,7 @@
 				index_Ponderance: 0,
 				index_Priority: 0,
 				index_Status: 0,
+				status_class: 'uni-input',
 				
 				// 项目
 				arrProduct: ['A4', 'A7', 'ES1', 'SL4'],
@@ -143,8 +144,9 @@
 				arrPonderance: ['新功能', '细节', '文字', '小调整', '小错误', '很严重', '崩溃', '宕机'],
 				// 优先级
 				arrPriority: ['无', '低', '中', '高', '小错误', '紧急', '非常紧急'],
-				// 状态
-				arrStatus: ['新建', '反馈', '认可', '已确认', '已解决', '已关闭']
+				// 问题状态
+				arrStatus: ['新建', '反馈', '认可/公认', '已确认', '已分派', '已解决', '已关闭'],
+				arrStatus_Eng: ['New', 'Feedback', 'Acknowledged', 'Confirmed', 'Assigned', 'Resolved', 'Closed']
 			}
 		},
 		onLoad(option) {
@@ -175,6 +177,8 @@
 				this.bug._id = "";
 				this.bug.created_date = "";
 				this.bug.last_modified_date = "";
+				
+				this.status_class = this.getStatusClass(0);
 			},
 			bindProductChange: function(e) {
 				this.index_Product = e.target.value;
@@ -199,6 +203,7 @@
 			bindStatusChange: function(e) {
 				this.index_Status = e.target.value;
 				this.bug.status = this.arrStatus[this.index_Status];
+				this.status_class = this.getStatusClass(this.index_Status);
 			},
 			save: function(e) {
 				var that = this;
@@ -313,6 +318,26 @@
 			    };
 			    return fmt;
 			},
+			getStatusClass: function(index) {
+				switch (index){
+					case 0:
+						return 'status_new';
+					case 1:
+						return 'status_feedback';
+					case 2:
+						return 'status_acknowledged';
+					case 3:
+						return 'status_confirmed';
+					case 4:
+						return 'status_assigned';
+					case 5:
+						return 'status_resolved';
+					case 6:
+						return 'status_closed';
+					default:
+						return 'status_new';
+				}
+			}
 			
 		}
 		

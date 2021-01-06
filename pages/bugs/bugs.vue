@@ -9,7 +9,7 @@
 			<tr v-for="(item,index) in arrData" :key="index" :class="index % 2 == 0 ? 'content' : 'content2'" @click="edit(item)">
 				<td style="padding: 10rpx;">{{item.type}}</td>
 				<td style="padding: 10rpx;">{{item.ponderance}}</td>
-				<td style="padding: 10rpx;">{{item.status}}</td>
+				<td style="padding: 10rpx;" :class="getStatusClass(getStatusIndex(item.status))">{{item.status}}</td>
 				<td style="padding: 10rpx;">{{substrDate(item.last_modified_date)}}</td>
 				<td style="padding: 10rpx;">{{item.title}}</td>
 			</tr>
@@ -21,16 +21,18 @@
 	export default {
 		data() {
 			return {
-				arrHeader:['分类','严重性','状态','最后更新','摘要'],
-				project:'',
-				arrData: []
+				arrHeader: ['分类', '严重性', '状态', '最后更新', '摘要'],
+				project: '',
+				arrData: [],
+				// 问题状态
+				arrStatus: ['新建', '反馈', '认可/公认', '已确认', '已分派', '已解决', '已关闭']
 			}
 		},
 		onLoad(option) {
 			this.project = option.page;
 			if (option.page != 'null') {
 				uni.setNavigationBarTitle({
-				　　title: 'Bug Tracker [' + option.page + ']'
+					title: 'Bug Tracker [' + option.page + ']'
 				})
 			}
 			this.loadDataOnLine(1, 100);
@@ -38,7 +40,7 @@
 		methods: {
 			edit: function(item) {
 				uni.navigateTo({
-				    url: '../bug_edit/bug_edit?page=' + item.project + '&item=' + encodeURIComponent(JSON.stringify(item))
+					url: '../bug_edit/bug_edit?page=' + item.project + '&item=' + encodeURIComponent(JSON.stringify(item))
 				});
 			},
 			// 查找云端数据
@@ -49,7 +51,9 @@
 					data: {
 						pageIndex: pageIndex,
 						pageSize: pageSize,
-						filter: {"project": that.project}
+						filter: {
+							"project": that.project
+						}
 					},
 					success(res) {
 						that.arrData = res.result.data;
@@ -67,10 +71,39 @@
 			substrDate: function(datetime) {
 				var index = datetime.indexOf(' ');
 				return datetime.substr(0, index);
+			},
+			getStatusClass: function(index) {
+				switch (index) {
+					case 0:
+						return 'status_new';
+					case 1:
+						return 'status_feedback';
+					case 2:
+						return 'status_acknowledged';
+					case 3:
+						return 'status_confirmed';
+					case 4:
+						return 'status_assigned';
+					case 5:
+						return 'status_resolved';
+					case 6:
+						return 'status_closed';
+					default:
+						return 'status_new';
+				}
+			},
+			getStatusIndex: function(status) {
+				var size = this.arrStatus.length;
+				for (var i = 0; i < size; i++) {
+					if (status == this.arrStatus[i])
+						return i;
+				}
+				return 0;
 			}
-			
+
+
 		}
-		
+
 	}
 </script>
 
@@ -79,20 +112,24 @@
 		padding: 10rpx;
 		font-size: 26rpx;
 	}
-	
+
 	.header {
 		padding: 10rpx;
 	}
+
 	.content {
 		text-align: center;
 		background-color: #D3D3D3;
 	}
+
 	.content:hover {
 		background-color: #F0AD4E;
 	}
+
 	.content2 {
 		text-align: center;
 	}
+
 	.content2:hover {
 		background-color: #F0AD4E;
 	}

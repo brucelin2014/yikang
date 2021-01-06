@@ -7,9 +7,26 @@
 		</view>
 
 		<view class="quick_menu">
-			<view class="report" @click="report">◕</view>
-			<view class="new" @click="add">+</view>
-			<view class="download" @click="download">🠗</view>
+			<view class="memu_item" @click="report">
+				<view class="report">◕</view>
+				<view class="memu_item_title">
+					Report
+				</view>
+			</view>
+			
+			<view class="memu_item" @click="add">
+				<view class="new">+</view>
+				<view class="memu_item_title">
+					Add
+				</view>
+			</view>
+			
+			<view class="memu_item" @click="download">
+				<view class="download">🠗</view>
+				<view class="memu_item_title">
+					Download
+				</view>
+			</view>
 		</view>
 
 	</view>
@@ -118,6 +135,19 @@
 		width: 80%;
 		bottom: 50rpx;
 	}
+	.memu_item {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		
+		margin-left: 5%;
+		margin-right: 5%;
+	}
+	.memu_item_title {
+		text-align: center;
+		margin-top: 10rpx;
+	}
 
 	.new,
 	.report,
@@ -132,8 +162,6 @@
 		background-color: #999999;
 		font-size: 100rpx;
 		line-height: 110rpx;
-		margin-left: 5%;
-		margin-right: 5%;
 	}
 
 	.new {
