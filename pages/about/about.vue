@@ -5,7 +5,7 @@
 			<view>标准: 参照
 				<a href="http://demo.mantisbt.org/" target="_blank">Mantis Bug Tracker</a>开发
 			</view>
-			<view>版本: V1.0.0</view>
+			<view>版本: {{version}}</view>
 			<view>安卓APP: 扫码下载</view>
 			<view class="qrimg">
 			    <tki-qrcode
@@ -31,6 +31,7 @@
 		},
 		data() {
 			return {
+				version: '',
 				val: '',
 				size: 200,
 				background: '#ffffff',
@@ -57,7 +58,7 @@
 					},
 					success(res) {
 						that.val = res.result.data[0].download_path;
-						//console.log(that.val);
+						that.version = res.result.data[0].version;
 					},
 					fail(e) {
 						console.error(e);

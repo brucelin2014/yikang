@@ -7,6 +7,7 @@
 				</th>
 			</tr>
 			<tr v-for="(item,index) in arrData" :key="index" :class="index % 2 == 0 ? 'content' : 'content2'" @click="edit(item)">
+				<td style="padding: 10rpx;">{{item.number}}</td>
 				<td style="padding: 10rpx;">{{item.type}}</td>
 				<td style="padding: 10rpx;">{{item.ponderance}}</td>
 				<td style="padding: 10rpx;" :class="getStatusClass(getStatusIndex(item.status))">{{item.status}}</td>
@@ -21,7 +22,7 @@
 	export default {
 		data() {
 			return {
-				arrHeader: ['分类', '严重性', '状态', '最后更新', '摘要'],
+				arrHeader: ['编号', '分类', '严重性', '状态', '最后更新', '摘要'],
 				project: '',
 				arrData: [],
 				// 问题状态

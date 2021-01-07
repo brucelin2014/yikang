@@ -2,6 +2,11 @@
 	<view class="container">
 		<view class="uni-list">
 			<view class="uni-list-cell">
+				<view class="uni-list-cell-left">编号</view>
+				<view class="uni-list-cell-db">{{bug.number}}</view>
+			</view>
+			
+			<view class="uni-list-cell">
 				<view class="uni-list-cell-left">项目</view>
 				<view class="uni-list-cell-db">
 					<picker @change="bindProductChange" :value="index_Product" :range="arrProduct">
@@ -17,6 +22,15 @@
 						<view class="uni-input">{{bug.type}}</view>
 					</picker>
 				</view>
+			</view>
+			
+			<view class="uni-list-cell">
+				<view class="uni-list-cell-left">报告日期</view>
+				<view class="uni-list-cell-db">{{substrDate(bug.created_date)}}</view>
+			</view>
+			<view class="uni-list-cell">
+				<view class="uni-list-cell-left">最后更新</view>
+				<view class="uni-list-cell-db">{{substrDate(bug.last_modified_date)}}</view>
 			</view>
 
 			<view class="uni-list-cell">
@@ -106,18 +120,19 @@
 		data() {
 			return {
 				bug: {
+					number: '',
 					project: '',
 					type: '',
 					frequency: '',
 					ponderance: '',
-					priority: '',
 					
+					priority: '',
 					version: '',
 					title: '',
 					remarks: '',
 					attachments: [],
-					status: '',
 					
+					status: '',
 					submitter: 'Bruce',
 					assigned: 'Bruce',
 					
@@ -156,6 +171,9 @@
 				console.log(decodeURIComponent(option.item));
 				this.bug = JSON.parse(decodeURIComponent(option.item));
 			}
+			else {
+				this.nextNumber();
+			}
 		},
 		methods: {
 			init: function() {
@@ -175,8 +193,8 @@
 				this.bug.assigned = "Bruce";
 				
 				this.bug._id = "";
-				this.bug.created_date = "";
-				this.bug.last_modified_date = "";
+				this.bug.created_date = this.dateFormat("YYYY-mm-dd HH:MM:SS", new Date());
+				this.bug.last_modified_date = this.dateFormat("YYYY-mm-dd HH:MM:SS", new Date());
 				
 				this.status_class = this.getStatusClass(0);
 			},
@@ -204,6 +222,24 @@
 				this.index_Status = e.target.value;
 				this.bug.status = this.arrStatus[this.index_Status];
 				this.status_class = this.getStatusClass(this.index_Status);
+			},
+			nextNumber: function() {
+				var that = this;
+				uniCloud.callFunction({
+					name: "get_next_number",
+					data: {
+					},
+					success(res) {
+						that.bug.number = res.result.data;
+					},
+					fail(e) {
+						console.error(e);
+					},
+					complete() {
+						uni.hideLoading();
+					}
+				});
+				uni.showLoading();
 			},
 			save: function(e) {
 				var that = this;
@@ -337,7 +373,11 @@
 					default:
 						return 'status_new';
 				}
-			}
+			},
+			substrDate: function(datetime) {
+				var index = datetime.indexOf(' ');
+				return datetime.substr(0, index);
+			},
 			
 		}
 		
