@@ -81,6 +81,7 @@
 					+
 				</view>
 			</view>
+			
 			<view class="uni-list-cell">
 				<view class="uni-list-cell-left"></view>
 				<image v-for="(item, index) in bug.attachments" :key="index" :src="item.fileID" class="img" @click="previewImage(index)"></image>
@@ -103,6 +104,16 @@
 			<view class="uni-list-cell">
 				<view class="uni-list-cell-left">分派给</view>
 				<input class="uni-list-cell-db" name="input" placeholder="" v-model="bug.assigned" />
+			</view>
+			
+			<view class="uni-list-cell">
+				<view class="uni-list-cell-left">添加注释</view>
+				<view style="width: 75%; display: flex;">
+					<input class="uni-list-cell-db" name="input" style="width: 85%;" v-model="reply" />
+					<view class="addImage">
+						+
+					</view>
+				</view>
 			</view>
 			
 			<view class="uni-list-cell">
@@ -148,6 +159,7 @@
 				index_Priority: 0,
 				index_Status: 0,
 				status_class: 'uni-input',
+				reply: '', // 添加注释
 				
 				// 项目
 				arrProduct: ['A4', 'A7', 'ES1', 'SL4'],
@@ -158,7 +170,7 @@
 				// 严重性
 				arrPonderance: ['新功能', '细节', '文字', '小调整', '小错误', '很严重', '崩溃', '宕机'],
 				// 优先级
-				arrPriority: ['无', '低', '中', '高', '小错误', '紧急', '非常紧急'],
+				arrPriority: ['无', '低', '中', '高', '紧急', '非常紧急'],
 				// 问题状态
 				arrStatus: ['新建', '反馈', '认可/公认', '已确认', '已分派', '已解决', '已关闭'],
 				arrStatus_Eng: ['New', 'Feedback', 'Acknowledged', 'Confirmed', 'Assigned', 'Resolved', 'Closed']

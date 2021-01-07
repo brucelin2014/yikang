@@ -2,7 +2,7 @@
 	<view class="container">
 		<view class="text">
 			<view>功能: 缺陷跟踪系统</view>
-			<view>标准: 参照
+			<view>标准: 参考
 				<a href="http://demo.mantisbt.org/" target="_blank">Mantis Bug Tracker</a>开发
 			</view>
 			<view>版本: {{version}}</view>
