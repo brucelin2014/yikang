@@ -1,5 +1,6 @@
 <template>
 	<view class="container" :style="{'height': windowHeight}">
+		<marquee class="message" behavior="scroll">{{settings.message}}</marquee>
 		<view class="products">
 			<view v-for="(item,index) in arrProduct" :key="index" class="product_item" @click="goto(item)">
 				{{item}}
@@ -38,7 +39,12 @@
 			return {
 				user: '',
 				windowHeight: 0,
-				arrProduct: ['A4', 'A7', 'ES1', 'SL4']
+				arrProduct: ['A4', 'A7', 'ES1', 'SL4'],
+				settings: {
+					download_path: '',
+					version: '',
+					message: ''
+				}
 			}
 		},
 		onLoad(option) {
@@ -49,7 +55,8 @@
 					this.windowHeight = res.windowHeight + "px";
 					//console.log(this.windowHeight);
 				}
-			})
+			});
+			this.loadDataOnLine();
 		},
 		methods: {
 			goto: function(page) {
@@ -81,7 +88,26 @@
 				uni.navigateTo({
 					url: '../about/about'
 				});
-			}
+			},
+			// 查找云端数据
+			loadDataOnLine: function() {
+				var that = this;
+				uniCloud.callFunction({
+					name: "get_settings",
+					data: {
+					},
+					success(res) {
+						that.settings = res.result.data[0];
+					},
+					fail(e) {
+						console.error(e);
+					},
+					complete() {
+						uni.hideLoading();
+					}
+				});
+				uni.showLoading();
+			},
 		}
 	}
 </script>
@@ -91,6 +117,7 @@
 		display: flex;
 		justify-content: center;
 		align-items: center;
+		flex-direction: column;
 	}
 
 	.products {
@@ -101,7 +128,7 @@
 		flex-wrap: wrap;
 
 		width: 80%;
-		height: 60%;
+		height: 55%;
 		font-size: 60rpx;
 		border-radius: 20rpx;
 		background-color: #f3f3f3;
@@ -176,5 +203,13 @@
 	.download:hover {
 		background-color: #4CD964;
 		color: #FFFFFF;
+	}
+	
+	.message {
+		position: absolute;
+		width: 90%;
+		top: 80rpx;
+		
+		font-size: 35rpx;
 	}
 </style>

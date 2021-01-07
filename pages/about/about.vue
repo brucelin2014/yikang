@@ -31,6 +31,11 @@
 		},
 		data() {
 			return {
+				settings: {
+					download_path: '',
+					version: '',
+					message: ''
+				},
 				version: '',
 				val: '',
 				size: 200,
