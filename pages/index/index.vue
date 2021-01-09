@@ -9,21 +9,27 @@
 
 		<view class="quick_menu">
 			<view class="memu_item" @click="report">
-				<view class="report">◕</view>
+				<view class="report">
+					<uni-icons type="pengyouquan" size="35" color="#ffffff"></uni-icons>
+				</view>
 				<view class="memu_item_title">
 					Report
 				</view>
 			</view>
 			
 			<view class="memu_item" @click="add">
-				<view class="new">+</view>
+				<view class="new">
+					<uni-icons type="plusempty" size="35" color="#ffffff"></uni-icons>
+				</view>
 				<view class="memu_item_title">
 					Add
 				</view>
 			</view>
 			
 			<view class="memu_item" @click="download">
-				<view class="download">🠗</view>
+				<view class="download">
+					<uni-icons type="cloud-download" size="30" color="#ffffff"></uni-icons>
+				</view>
 				<view class="memu_item_title">
 					Download
 				</view>
@@ -49,7 +55,7 @@
 		},
 		onLoad(option) {
 			this.user = option.user;
-			console.log(this.user);
+			//console.log(this.user);
 			uni.getSystemInfo({
 				success: (res) => {
 					this.windowHeight = res.windowHeight + "px";
@@ -83,8 +89,8 @@
 				})
 			},
 			onNavigationBarButtonTap: function(e) {
-				console.log(e.text);
-				console.log(e.fontSize);
+				//console.log(e.text);
+				//console.log(e.fontSize);
 				uni.navigateTo({
 					url: '../about/about'
 				});
@@ -181,20 +187,18 @@
 	.download {
 		display: flex;
 		justify-content: center;
-
-		color: #FFFFFF;
+		
 		width: 120rpx;
 		height: 120rpx;
 		border-radius: 100%;
 		background-color: #999999;
-		font-size: 100rpx;
-		line-height: 110rpx;
+		line-height: 120rpx;
 	}
 
 	.new {
 		width: 140rpx;
 		height: 140rpx;
-		line-height: 130rpx;
+		line-height: 140rpx;
 		background-color: #2196F3;
 	}
 
@@ -202,7 +206,6 @@
 	.report:hover,
 	.download:hover {
 		background-color: #4CD964;
-		color: #FFFFFF;
 	}
 	
 	.message {

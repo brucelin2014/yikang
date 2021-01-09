@@ -26,11 +26,11 @@
 
 			<view class="uni-list-cell">
 				<view class="uni-list-cell-left">报告日期</view>
-				<view class="uni-list-cell-db">{{substrDate(bug.created_date)}}</view>
+				<view class="uni-list-cell-db">{{$datetime.substrDate(bug.created_date)}}</view>
 			</view>
 			<view class="uni-list-cell">
 				<view class="uni-list-cell-left">最后更新</view>
-				<view class="uni-list-cell-db">{{substrDate(bug.last_modified_date)}}</view>
+				<view class="uni-list-cell-db">{{$datetime.substrDate(bug.last_modified_date)}}</view>
 			</view>
 
 			<view class="uni-list-cell">
@@ -81,15 +81,15 @@
 			</view>
 			
 			<view class="uni-list-cell">
-				<view class="uni-list-cell-left">上传图片 </view>
-				<view class="addImage" @click="uploadFile">
+				<view class="uni-list-cell-left">添加图片 </view>
+				<view class="addImage" @click="addFile">
 					+
 				</view>
 			</view>
 			
 			<view class="uni-list-cell">
 				<view class="uni-list-cell-left"></view>
-				<image v-for="(item, index) in bug.attachments" :key="index" :src="item.fileID" class="img" @click="previewImage(index)"></image>
+				<image v-for="(item, index) in attachments" :key="index" :src="item.fileID != '' ? item.fileID : item.tempFilePath" class="img" @click="previewImage(index)"></image>
 			</view>
 			
 			<view class="uni-list-cell">
@@ -176,6 +176,7 @@
 				index_Status: 0,
 				status_class: 'uni-input',
 				selected_reply: null,
+				attachments: [],
 				
 				// 项目
 				arrProduct: ['A4', 'A7', 'ES1', 'SL4'],
@@ -199,6 +200,7 @@
 				//console.log(decodeURIComponent(option.item));
 				this.bug = JSON.parse(decodeURIComponent(option.item));
 				this.status_class = this.getStatusClass(this.getStatusIndex(this.bug.status));
+				this.attachments = this.bug.attachments;
 			}
 			else {
 				this.nextNumber();
@@ -225,8 +227,8 @@
 				this.bug.replys = []; // 添加注释
 				
 				this.bug._id = "";
-				this.bug.created_date = this.dateFormat("YYYY-mm-dd HH:MM:SS", new Date());
-				this.bug.last_modified_date = this.dateFormat("YYYY-mm-dd HH:MM:SS", new Date());
+				this.bug.created_date = this.$datetime.dateFormat("YYYY-mm-dd HH:MM:SS", new Date());
+				this.bug.last_modified_date = this.$datetime.dateFormat("YYYY-mm-dd HH:MM:SS", new Date());
 				
 				this.status_class = this.getStatusClass(0);
 			},
@@ -275,119 +277,122 @@
 			},
 			save: function(e) {
 				var that = this;
-				that.bug.created_date = that.dateFormat("YYYY-mm-dd HH:MM:SS", new Date());
-				that.bug.last_modified_date = that.dateFormat("YYYY-mm-dd HH:MM:SS", new Date());
-				
-				uniCloud.callFunction({
-					name: "add_bug",
-					data: {
-						number: that.bug.number,
-						project: that.bug.project,
-						type: that.bug.type,
-						frequency: that.bug.frequency,
-						ponderance: that.bug.ponderance,
-						
-						priority: that.bug.priority,
-						version: that.bug.version,
-						title: that.bug.title,
-						remarks: that.bug.remarks,
-						steps: that.bug.steps,
-						
-						attachments: that.bug.attachments,
-						status: that.bug.status,
-						submitter: that.bug.submitter,
-						assigned: that.bug.assigned,
-						replys: that.bug.replys,
-						
-						_id: that.bug._id,
-						created_date: that.bug.created_date,
-						last_modified_date: that.bug.last_modified_date
-					},
-					success(res) {
-						if (that.bug._id == '')
-							that.bug._id = res.result.data;
-						uni.showToast({
-							title:"Submit successful.",
-							icon:'none'
-						})
-					},
-					fail(e) {
-						console.error(e);
-					},
-					complete() {
-						uni.hideLoading();
-					}
-				});
-				uni.showLoading();
+				that.bug.created_date = that.$datetime.dateFormat("YYYY-mm-dd HH:MM:SS", new Date());
+				that.bug.last_modified_date = that.$datetime.dateFormat("YYYY-mm-dd HH:MM:SS", new Date());
+				that.uploadFile(function() {
+					//console.log(JSON.stringify(that.bug));
+					uniCloud.callFunction({
+						name: "add_bug",
+						data: {
+							number: that.bug.number,
+							project: that.bug.project,
+							type: that.bug.type,
+							frequency: that.bug.frequency,
+							ponderance: that.bug.ponderance,
+							
+							priority: that.bug.priority,
+							version: that.bug.version,
+							title: that.bug.title,
+							remarks: that.bug.remarks,
+							steps: that.bug.steps,
+							
+							attachments: that.bug.attachments,
+							status: that.bug.status,
+							submitter: that.bug.submitter,
+							assigned: that.bug.assigned,
+							replys: that.bug.replys,
+							
+							_id: that.bug._id,
+							created_date: that.bug.created_date,
+							last_modified_date: that.bug.last_modified_date
+						},
+						success(res) {
+							if (that.bug._id == '')
+								that.bug._id = res.result.data;
+							uni.showToast({
+								title:"Submit successful.",
+								icon:'none'
+							})
+						},
+						fail(e) {
+							console.error(e);
+						},
+						complete() {
+							uni.hideLoading();
+						}
+					});
+					uni.showLoading();
+				})
 			},
 			clear: function(e) {
 				this.init();
 			},
-			uploadFile: function() {
+			addFile: function() {
 				var that = this;
 				uni.chooseImage({
 				    count: 1,
 				    success(res) {
-				        //console.log(res);
 				        if (res.tempFilePaths.length > 0) {
 				            let filePath = res.tempFilePaths[0];
 							let date = new Date();
-							let cloudPath = that.dateFormat("YYYYmmdd-HHMMSS", date) + ".jpg";
+							let cloudPath = that.$datetime.dateFormat("YYYYmmdd-HHMMSS", date) + "-" + Math.ceil(Math.random() * 10) + ".jpg";
 							
-				            uniCloud.uploadFile({
-				                filePath: filePath,
-								cloudPath: cloudPath,
-				                success(e) {
-									if (e.success) {
-										var file = {fileID: e.fileID};
-										that.bug.attachments.push(file);
-									} else {
-										uni.showToast({
-											title:"Upload file failure.",
-											icon:'none'
-										})
-									}
-								},
-				                fail(e) {
-									console.error(e);
-								},
-				                complete() {
-									uni.hideLoading();
-								}
-				            });
-							uni.showLoading();
+							var attachment = {
+								fileName: cloudPath,
+								tempFilePath: filePath,
+								fileID: ''
+							};
+							that.attachments.push(attachment);
 				        }
 				    }
 				});
 			},
+			uploadFile: function(callback) {
+				var that = this;
+				var size = that.attachments.length;
+				for (let i=0; i<size; i++) {
+					let attachment = that.attachments[i];
+					setTimeout(function() {
+						uniCloud.uploadFile({
+						    filePath: attachment.tempFilePath,
+							cloudPath: attachment.fileName,
+						    success(e) {
+								if (e.success) {
+									//console.log(i + ", " + size);
+									attachment.fileID = e.fileID;
+									//console.log(JSON.stringify(attachment));
+									that.bug.attachments.push(attachment);
+									if (i == size - 1) {
+										if (callback)
+											callback();
+									}
+								} else {
+									uni.showToast({
+										title:"Upload file failure.",
+										icon:'none'
+									})
+								}
+							},
+						    fail(e) {
+								console.error(e);
+							},
+						    complete() {
+								uni.hideLoading();
+							}
+						});
+						uni.showLoading();
+					}, i * 1000);
+				}
+			},
 			previewImage: function(index) {
 				var arr = [];
-				for (var i=0; i<this.bug.attachments.length; i++) {
-					arr.push(this.bug.attachments[i].fileID);
+				for (var i=0; i<this.attachments.length; i++) {
+					arr.push(this.attachments[i].fileID != '' ? this.attachments[i].fileID : this.attachments[i].tempFilePath);
 				}
 				uni.previewImage({
 					urls: arr,
 					current: index
 				});
-			},
-			dateFormat: function(fmt, date) {
-			    let ret;
-			    const opt = {
-			        "Y+": date.getFullYear().toString(),        // 年
-			        "m+": (date.getMonth() + 1).toString(),     // 月
-			        "d+": date.getDate().toString(),            // 日
-			        "H+": date.getHours().toString(),           // 时
-			        "M+": date.getMinutes().toString(),         // 分
-			        "S+": date.getSeconds().toString()          // 秒
-			        // 有其他格式化字符需求可以继续添加，必须转化成字符串
-			    };
-			    for (let k in opt) {
-			        ret = new RegExp("(" + k + ")").exec(fmt);
-			        if (ret) {
-			            fmt = fmt.replace(ret[1], (ret[1].length == 1) ? (opt[k]) : (opt[k].padStart(ret[1].length, "0")))
-			        };
-			    };
-			    return fmt;
 			},
 			getStatusClass: function(index) {
 				switch (index){
@@ -417,13 +422,9 @@
 				}
 				return 0;
 			},
-			substrDate: function(datetime) {
-				var index = datetime.indexOf(' ');
-				return datetime.substr(0, index);
-			},
 			addReply: function(reply) {
 				var replyObj = {
-					last_modified_date: this.dateFormat("YYYY-mm-dd HH:MM:SS", new Date()),
+					last_modified_date: this.$datetime.dateFormat("YYYY-mm-dd HH:MM:SS", new Date()),
 					reply: reply
 				};
 				//console.log(JSON.stringify(replyObj));
@@ -442,13 +443,13 @@
 					this.addReply(value);
 				else {
 					this.selected_reply.reply = value;
-					this.selected_reply.last_modified_date = this.dateFormat("YYYY-mm-dd HH:MM:SS", new Date());
+					this.selected_reply.last_modified_date = this.$datetime.dateFormat("YYYY-mm-dd HH:MM:SS", new Date());
 				}
 				done();
 			},
 			editReply: function(item) {
 				this.selected_reply = item;
-				console.log(JSON.stringify(item));
+				//console.log(JSON.stringify(item));
 				this.$refs.popup.open();
 			}
 			

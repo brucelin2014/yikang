@@ -11,7 +11,7 @@
 				<td style="padding: 10rpx;">{{item.type}}</td>
 				<td style="padding: 10rpx;">{{item.ponderance}}</td>
 				<td style="padding: 10rpx;" :class="getStatusClass(getStatusIndex(item.status))">{{item.status}}</td>
-				<td style="padding: 10rpx;">{{substrDate(item.last_modified_date)}}</td>
+				<td style="padding: 10rpx;">{{$datetime.substrDate(item.last_modified_date)}}</td>
 				<td style="padding: 10rpx;">{{item.title}}</td>
 			</tr>
 		</table>
@@ -72,10 +72,6 @@
 					}
 				});
 				uni.showLoading();
-			},
-			substrDate: function(datetime) {
-				var index = datetime.indexOf(' ');
-				return datetime.substr(0, index);
 			},
 			getStatusClass: function(index) {
 				switch (index) {
