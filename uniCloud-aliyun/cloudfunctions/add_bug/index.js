@@ -1,3 +1,5 @@
+// 2021-01-02, Bruce
+
 'use strict';
 const db = uniCloud.database();
 
@@ -18,20 +20,22 @@ exports.main = async (event, context) => {
 		res = await collection.where({
 			"_id": event._id
 		}).update({
+			"number": event.number,
 			"project": event.project,
 			"type": event.type,
 			"frequency": event.frequency,
 			"ponderance": event.ponderance,
-			"priority": event.priority,
 			
+			"priority": event.priority,
 			"version": event.version,
 			"title": event.title,
 			"remarks": event.remarks,
 			"attachments": event.attachments,
-			"status": event.status,
 			
+			"status": event.status,
 			"submitter": event.submitter,
 			"assigned": event.assigned,
+			"replys": event.replys,
 			
 			//"created_date": event.created_date,
 			"last_modified_date": event.last_modified_date
@@ -40,20 +44,22 @@ exports.main = async (event, context) => {
 	} else {
 		// 增加
 		res = await collection.add({
+			"number": event.number,
 			"project": event.project,
 			"type": event.type,
 			"frequency": event.frequency,
 			"ponderance": event.ponderance,
-			"priority": event.priority,
 			
+			"priority": event.priority,
 			"version": event.version,
 			"title": event.title,
 			"remarks": event.remarks,
 			"attachments": event.attachments,
-			"status": event.status,
 			
+			"status": event.status,
 			"submitter": event.submitter,
 			"assigned": event.assigned,
+			"replys": event.replys,
 			
 			"created_date": event.created_date,
 			"last_modified_date": event.last_modified_date

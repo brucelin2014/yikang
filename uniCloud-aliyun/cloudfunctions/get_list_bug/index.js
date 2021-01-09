@@ -1,3 +1,5 @@
+// 2021-01-03, Bruce
+
 'use strict';
 const db = uniCloud.database();
 

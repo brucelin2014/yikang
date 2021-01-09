@@ -36,6 +36,10 @@
 					title: 'Bug Tracker [' + option.page + ']'
 				})
 			}
+			//this.loadDataOnLine(1, 100);
+		},
+		onShow: function() {
+			console.log('App Show');
 			this.loadDataOnLine(1, 100);
 		},
 		methods: {

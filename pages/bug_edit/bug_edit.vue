@@ -5,7 +5,7 @@
 				<view class="uni-list-cell-left">编号</view>
 				<view class="uni-list-cell-db">{{bug.number}}</view>
 			</view>
-			
+
 			<view class="uni-list-cell">
 				<view class="uni-list-cell-left">项目</view>
 				<view class="uni-list-cell-db">
@@ -23,7 +23,7 @@
 					</picker>
 				</view>
 			</view>
-			
+
 			<view class="uni-list-cell">
 				<view class="uni-list-cell-left">报告日期</view>
 				<view class="uni-list-cell-db">{{substrDate(bug.created_date)}}</view>
@@ -72,8 +72,13 @@
 
 			<view class="uni-list-cell">
 				<view class="uni-list-cell-left">描述</view>
-				<textarea class="uni-list-cell-db" style="height: 150rpx;" v-model="bug.remarks" />
-				</view>
+				<textarea class="uni-list-cell-db" style="height: 100rpx;" v-model="bug.remarks" />
+			</view>
+			
+			<view class="uni-list-cell">
+				<view class="uni-list-cell-left">问题重现步骤</view>
+				<textarea class="uni-list-cell-db" style="height: 180rpx;" v-model="bug.steps" />
+			</view>
 			
 			<view class="uni-list-cell">
 				<view class="uni-list-cell-left">上传图片 </view>
@@ -108,12 +113,21 @@
 			
 			<view class="uni-list-cell">
 				<view class="uni-list-cell-left">添加注释</view>
-				<view style="width: 75%; display: flex;">
-					<input class="uni-list-cell-db" name="input" style="width: 85%;" v-model="reply" />
-					<view class="addImage">
-						+
+				<view class="addImage" @click="open">
+					+
+				</view>
+				<uni-popup ref="popup" type="dialog">
+					<uni-popup-dialog v-model="selected_reply == null ? '' : selected_reply.reply" :title="selected_reply == null ? '添加注释' : '编辑注释'" mode="input" :duration="2000" :before-close="true" @close="close" @confirm="confirm"></uni-popup-dialog>
+				</uni-popup>
+			</view>
+			
+			<view class="uni-list-cell" v-for="(item, index) in bug.replys" :key="index" @click="editReply(item)">
+				<view class="uni-list-cell-left">
+					<view style="color: #2196F3; font-size: 18rpx; width: 100%; text-align: right; padding-right: 20rpx;">
+						{{item.last_modified_date}}
 					</view>
 				</view>
+				<view class="uni-list-cell-db" >{{item.reply}}</view>
 			</view>
 			
 			<view class="uni-list-cell">
@@ -141,15 +155,17 @@
 					version: '',
 					title: '',
 					remarks: '',
-					attachments: [],
+					steps: '',
 					
+					attachments: [],
 					status: '',
 					submitter: 'Bruce',
 					assigned: 'Bruce',
+					replys: [], // 添加注释
 					
 					_id: '',
 					created_date: '',
-					last_modified_date: ''
+					last_modified_date: '',
 				},
 				
 				index_Product: 0,
@@ -159,7 +175,7 @@
 				index_Priority: 0,
 				index_Status: 0,
 				status_class: 'uni-input',
-				reply: '', // 添加注释
+				selected_reply: null,
 				
 				// 项目
 				arrProduct: ['A4', 'A7', 'ES1', 'SL4'],
@@ -180,8 +196,9 @@
 			this.init();
 			this.bug.project = option.page;
 			if (option.item != 'null' && option.item != undefined) {
-				console.log(decodeURIComponent(option.item));
+				//console.log(decodeURIComponent(option.item));
 				this.bug = JSON.parse(decodeURIComponent(option.item));
+				this.status_class = this.getStatusClass(this.getStatusIndex(this.bug.status));
 			}
 			else {
 				this.nextNumber();
@@ -189,20 +206,23 @@
 		},
 		methods: {
 			init: function() {
+				this.bug.number = "";
 				this.bug.project = this.arrProduct[0];
 				this.bug.type = this.arrType[0];
 				this.bug.frequency = this.arrFrequency[0];
 				this.bug.ponderance = this.arrPonderance[0];
-				this.bug.priority = this.arrPriority[0];
 				
+				this.bug.priority = this.arrPriority[0];
 				this.bug.version = "";
 				this.bug.title = "";
 				this.bug.remarks = "";
+				this.bug.steps = "";
+				
 				this.bug.attachments = [];
 				this.bug.status = this.arrStatus[0];
-				
 				this.bug.submitter = "Bruce";
 				this.bug.assigned = "Bruce";
+				this.bug.replys = []; // 添加注释
 				
 				this.bug._id = "";
 				this.bug.created_date = this.dateFormat("YYYY-mm-dd HH:MM:SS", new Date());
@@ -261,20 +281,23 @@
 				uniCloud.callFunction({
 					name: "add_bug",
 					data: {
+						number: that.bug.number,
 						project: that.bug.project,
 						type: that.bug.type,
 						frequency: that.bug.frequency,
 						ponderance: that.bug.ponderance,
-						priority: that.bug.priority,
 						
+						priority: that.bug.priority,
 						version: that.bug.version,
 						title: that.bug.title,
 						remarks: that.bug.remarks,
+						steps: that.bug.steps,
+						
 						attachments: that.bug.attachments,
 						status: that.bug.status,
-						
 						submitter: that.bug.submitter,
 						assigned: that.bug.assigned,
+						replys: that.bug.replys,
 						
 						_id: that.bug._id,
 						created_date: that.bug.created_date,
@@ -386,10 +409,48 @@
 						return 'status_new';
 				}
 			},
+			getStatusIndex: function(status) {
+				var size = this.arrStatus.length;
+				for (var i=0; i<size; i++) {
+					if (this.arrStatus[i] == status)
+						return i;
+				}
+				return 0;
+			},
 			substrDate: function(datetime) {
 				var index = datetime.indexOf(' ');
 				return datetime.substr(0, index);
 			},
+			addReply: function(reply) {
+				var replyObj = {
+					last_modified_date: this.dateFormat("YYYY-mm-dd HH:MM:SS", new Date()),
+					reply: reply
+				};
+				//console.log(JSON.stringify(replyObj));
+				//console.log(JSON.stringify(this.bug.replys));
+				this.bug.replys.push(replyObj);	
+			},
+			open: function() {
+				this.selected_reply = null;
+				this.$refs.popup.open();
+			},
+			close: function(done) {
+				done();
+			},
+			confirm: function(done, value) {
+				if (this.selected_reply == null)
+					this.addReply(value);
+				else {
+					this.selected_reply.reply = value;
+					this.selected_reply.last_modified_date = this.dateFormat("YYYY-mm-dd HH:MM:SS", new Date());
+				}
+				done();
+			},
+			editReply: function(item) {
+				this.selected_reply = item;
+				console.log(JSON.stringify(item));
+				this.$refs.popup.open();
+			}
 			
 		}
 		
