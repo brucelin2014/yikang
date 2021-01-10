@@ -1,26 +1,34 @@
 {
-	"pages": [
-		{
-			"path": "pages/login/login",
-			"style": {
-				"navigationBarTitleText": "Bug Tracker",
-				"enablePullDownRefresh": false
-			}
-		
-		},{
+	"pages": [{
+		"path": "pages/login/login",
+		"style": {
+			"navigationBarTitleText": "Bug Tracker",
+			"enablePullDownRefresh": false
+		}
+
+	}, {
 		"path": "pages/index/index",
 		"style": {
 			"navigationBarTitleText": "Bug Tracker",
 			"app-plus": {
 				"titleNView": {
 					"buttons": [{
-						"fontSrc": "/static/iconfont.ttf",
-						"text": "\ue648",
-						"type": "none",
-						"color": "rgb(0,0,0)",
-						"fontSize": "22px",
-						"float": "right"
-					}]
+							"fontSrc": "/static/uni.ttf",
+							"text": "\ue504",
+							"type": "none",
+							"color": "rgb(0,0,0)",
+							"fontSize": "22px",
+							"float": "right"
+						},
+						{
+							"fontSrc": "/static/uni.ttf",
+							"text": "\ue408",
+							"type": "none",
+							"color": "rgb(0,0,0)",
+							"fontSize": "22px",
+							"float": "right"
+						}
+					]
 				}
 			}
 		}
@@ -45,7 +53,16 @@
 			"enablePullDownRefresh": false
 		}
 
-	}],
+	}    ,{
+            "path" : "pages/share/share",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "Share",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+    ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "yikang",

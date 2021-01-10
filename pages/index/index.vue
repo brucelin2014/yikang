@@ -91,9 +91,21 @@
 			onNavigationBarButtonTap: function(e) {
 				//console.log(e.text);
 				//console.log(e.fontSize);
-				uni.navigateTo({
-					url: '../about/about'
-				});
+				//console.log(e.index);
+				switch (e.index){
+					case 0:
+						uni.navigateTo({
+							url: '../about/about'
+						});
+						break;
+					case 1:
+						uni.navigateTo({
+							url: '../share/share'
+						});
+						break;
+					default:
+						break;
+				}
 			},
 			// 查找云端数据
 			loadDataOnLine: function() {
