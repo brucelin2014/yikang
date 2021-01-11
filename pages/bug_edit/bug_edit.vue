@@ -123,7 +123,7 @@
 			
 			<view class="uni-list-cell" v-for="(item, index) in bug.replys" :key="index" @click="editReply(item)">
 				<view class="uni-list-cell-left">
-					<view style="color: #2196F3; font-size: 18rpx; width: 100%; text-align: right; padding-right: 20rpx;">
+					<view style="color: #2196F3; font-size: 20rpx; width: 100%; text-align: right; padding-right: 20rpx;">
 						{{item.last_modified_date}}
 					</view>
 				</view>
@@ -277,7 +277,8 @@
 			},
 			save: function(e) {
 				var that = this;
-				that.bug.created_date = that.$datetime.dateFormat("YYYY-mm-dd HH:MM:SS", new Date());
+				if (that.bug._id == '')
+					that.bug.created_date = that.$datetime.dateFormat("YYYY-mm-dd HH:MM:SS", new Date());
 				that.bug.last_modified_date = that.$datetime.dateFormat("YYYY-mm-dd HH:MM:SS", new Date());
 				that.uploadFile(function() {
 					//console.log(JSON.stringify(that.bug));
@@ -350,6 +351,12 @@
 			uploadFile: function(callback) {
 				var that = this;
 				var size = that.attachments.length;
+				if (size < 1) {
+					if (callback)
+						callback();
+					return;
+				}
+				
 				for (let i=0; i<size; i++) {
 					let attachment = that.attachments[i];
 					setTimeout(function() {
