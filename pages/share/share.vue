@@ -65,7 +65,7 @@
 		display: flex;
 		flex-direction: column;
 		
-		background-color: #eeeeee;
+		background-color: #dee1e6;
 		border-radius: 20rpx;
 		margin: 20rpx;
 		padding: 20rpx;

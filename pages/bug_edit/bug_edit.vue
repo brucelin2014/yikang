@@ -472,7 +472,7 @@
 	}
 	
 	.uni-list {
-		background-color: #F5F5F5;
+		background-color: #dee1e6;
 		border-radius: 10rpx;
 	}
 	.uni-list-cell {
@@ -490,7 +490,7 @@
 		width: 75%;
 		padding: 10rpx;
 		border-radius: 10rpx;
-		border: 1px solid #C0C0C0;
+		border: 1px solid #dee1e6;
 	}
 	
 	.img {
@@ -506,7 +506,7 @@
 		font-size: 60rpx;
 		border-radius: 10rpx;
 		background-color: #FFFFFF;
-		border: 1px solid #C0C0C0;
+		border: 1px solid #dee1e6;
 		text-align: center;
 	}
 	

@@ -149,7 +149,7 @@
 		height: 55%;
 		font-size: 60rpx;
 		border-radius: 20rpx;
-		background-color: #f3f3f3;
+		background-color: #dee1e6;
 		margin-bottom: 10%;
 	}
 

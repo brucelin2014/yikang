@@ -57,7 +57,7 @@
 		padding: 50rpx;
 		text-align: left;
 		width: 600rpx;
-		background-color: #E5E5E5;
+		background-color: #dee1e6;
 		border-radius: 20rpx;
 		line-height: 80rpx;
 	}

@@ -120,7 +120,7 @@
 
 	.content {
 		text-align: center;
-		background-color: #D3D3D3;
+		background-color: #dee1e6;
 	}
 
 	.content:hover {
