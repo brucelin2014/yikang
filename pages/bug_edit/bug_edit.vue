@@ -327,6 +327,7 @@
 			},
 			clear: function(e) {
 				this.init();
+				this.bug.number = this.nextNumber();
 			},
 			addFile: function() {
 				var that = this;

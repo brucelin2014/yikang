@@ -192,6 +192,7 @@
 	.memu_item_title {
 		text-align: center;
 		margin-top: 10rpx;
+		font-size: 30rpx;
 	}
 
 	.new,
@@ -200,17 +201,17 @@
 		display: flex;
 		justify-content: center;
 		
-		width: 120rpx;
-		height: 120rpx;
+		width: 100rpx;
+		height: 100rpx;
 		border-radius: 100%;
 		background-color: #999999;
-		line-height: 120rpx;
+		line-height: 100rpx;
 	}
 
 	.new {
-		width: 140rpx;
-		height: 140rpx;
-		line-height: 140rpx;
+		width: 120rpx;
+		height: 120rpx;
+		line-height: 120rpx;
 		background-color: #2196F3;
 	}
 

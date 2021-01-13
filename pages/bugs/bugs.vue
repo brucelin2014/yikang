@@ -15,6 +15,18 @@
 				<td style="padding: 10rpx;">{{item.title}}</td>
 			</tr>
 		</table>
+
+		<view class="quick_menu" :style="{right: isLandscape ? '49%' : '50rpx'}">
+			<view class="memu_item" @click="add">
+				<view class="new">
+					<uni-icons type="plusempty" size="35" color="#ffffff"></uni-icons>
+				</view>
+				<view class="memu_item_title" v-if="isLandscape">
+					Add
+				</view>
+			</view>
+		</view>
+
 	</view>
 </template>
 
@@ -26,7 +38,8 @@
 				project: '',
 				arrData: [],
 				// 问题状态
-				arrStatus: ['新建', '反馈', '认可/公认', '已确认', '已分派', '已解决', '已关闭']
+				arrStatus: ['新建', '反馈', '认可/公认', '已确认', '已分派', '已解决', '已关闭'],
+				isLandscape: false // 是否横屏
 			}
 		},
 		onLoad(option) {
@@ -37,6 +50,13 @@
 				})
 			}
 			//this.loadDataOnLine(1, 100);
+			
+			uni.getSystemInfo({
+				success: (res) => {
+					if (res.windowWidth > res.windowHeight)
+						this.isLandscape = true;
+				}
+			});
 		},
 		onShow: function() {
 			console.log('App Show');
@@ -100,8 +120,12 @@
 						return i;
 				}
 				return 0;
+			},
+			add: function() {
+				uni.navigateTo({
+					url: '../bug_edit/bug_edit?page=' + this.project + '&item=' + null
+				});
 			}
-
 
 		}
 
@@ -133,5 +157,45 @@
 
 	.content2:hover {
 		background-color: #F0AD4E;
+	}
+
+	.quick_menu {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+
+		position: absolute;
+		bottom: 50rpx;
+		right: 50rpx;
+	}
+
+	.memu_item {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+
+		margin-left: 5%;
+		margin-right: 5%;
+	}
+	.memu_item_title {
+		text-align: center;
+		margin-top: 10rpx;
+		font-size: 30rpx;
+	}
+
+	.new {
+		display: flex;
+		justify-content: center;
+
+		border-radius: 100%;
+		width: 120rpx;
+		height: 120rpx;
+		line-height: 120rpx;
+		background-color: #2196F3;
+	}
+
+	.new:hover {
+		background-color: #4CD964;
 	}
 </style>
