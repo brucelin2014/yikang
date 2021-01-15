@@ -360,6 +360,15 @@
 				
 				for (let i=0; i<size; i++) {
 					let attachment = that.attachments[i];
+					// 排除已上传文件
+					if (attachment.fileID != '') {
+						if (i == size - 1) {
+							if (callback)
+								callback();
+						}
+						continue;
+					}
+					
 					setTimeout(function() {
 						uniCloud.uploadFile({
 						    filePath: attachment.tempFilePath,
