@@ -164,7 +164,7 @@
 		justify-content: center;
 		align-items: center;
 
-		position: absolute;
+		position: fixed;
 		bottom: 50rpx;
 		right: 50rpx;
 	}
