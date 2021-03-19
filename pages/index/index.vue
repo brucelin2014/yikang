@@ -1,11 +1,22 @@
 <template>
 	<view class="container" :style="{'height': windowHeight}">
 		<marquee class="message" behavior="scroll">{{settings.message}}</marquee>
-		<view class="products">
-			<view v-for="(item,index) in arrProduct" :key="index" class="product_item" @click="goto(item)">
-				{{item}}
+
+		<match-media :max-width="800" style="display: flex; justify-content: center; align-items: center;">
+			<view class="products">
+				<view v-for="(item,index) in arrProduct" :key="index" class="product_item_mobile" @click="goto(item)">
+					{{item}}
+				</view>
 			</view>
-		</view>
+		</match-media>
+
+		<match-media :min-width="800" style="display: flex; justify-content: center; align-items: center; width: 100%; height: 50%;">
+			<view class="products">
+				<view v-for="(item,index) in arrProduct" :key="index" class="product_item" @click="goto(item)">
+					{{item}}
+				</view>
+			</view>
+		</match-media>
 
 		<view class="quick_menu">
 			<view class="memu_item" @click="report">
@@ -16,7 +27,7 @@
 					Report
 				</view>
 			</view>
-			
+
 			<view class="memu_item" @click="add">
 				<view class="new">
 					<uni-icons type="plusempty" size="35" color="#ffffff"></uni-icons>
@@ -25,7 +36,7 @@
 					Add
 				</view>
 			</view>
-			
+
 			<view class="memu_item" @click="download">
 				<view class="download">
 					<uni-icons type="cloud-download" size="30" color="#ffffff"></uni-icons>
@@ -45,7 +56,7 @@
 			return {
 				user: '',
 				windowHeight: 0,
-				arrProduct: ['A4', 'A7', 'ES1', 'SL4'],
+				arrProduct: ['A3', 'A4', 'A7', 'ES1', 'SL4'],
 				settings: {
 					download_path: '',
 					version: '',
@@ -78,21 +89,21 @@
 			},
 			report: function() {
 				uni.showToast({
-					icon:'none',
-					title:'Please look forward.'
+					icon: 'none',
+					title: 'Please look forward.'
 				})
 			},
 			download: function() {
 				uni.showToast({
-					icon:'none',
-					title:'Please look forward.'
+					icon: 'none',
+					title: 'Please look forward.'
 				})
 			},
 			onNavigationBarButtonTap: function(e) {
 				//console.log(e.text);
 				//console.log(e.fontSize);
 				//console.log(e.index);
-				switch (e.index){
+				switch (e.index) {
 					case 0:
 						uni.navigateTo({
 							url: '../about/about'
@@ -112,8 +123,7 @@
 				var that = this;
 				uniCloud.callFunction({
 					name: "get_settings",
-					data: {
-					},
+					data: {},
 					success(res) {
 						that.settings = res.result.data[0];
 					},
@@ -146,14 +156,15 @@
 		flex-wrap: wrap;
 
 		width: 80%;
-		height: 55%;
+		height: 100%;
 		font-size: 60rpx;
 		border-radius: 20rpx;
 		background-color: #dee1e6;
 		margin-bottom: 10%;
 	}
 
-	.product_item {
+	.product_item,
+	.product_item_mobile {
 		display: flex;
 		justify-content: center;
 		align-items: center;
@@ -164,6 +175,11 @@
 		margin: 30rpx;
 		padding: 30rpx;
 		background-color: #FFFFFF;
+	}
+
+	.product_item_mobile {
+		width: 110rpx;
+		height: 110rpx;
 	}
 
 	.product_item:hover {
@@ -180,15 +196,17 @@
 		width: 80%;
 		bottom: 50rpx;
 	}
+
 	.memu_item {
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
 		align-items: center;
-		
+
 		margin-left: 5%;
 		margin-right: 5%;
 	}
+
 	.memu_item_title {
 		text-align: center;
 		margin-top: 10rpx;
@@ -200,7 +218,7 @@
 	.download {
 		display: flex;
 		justify-content: center;
-		
+
 		width: 100rpx;
 		height: 100rpx;
 		border-radius: 100%;
@@ -220,12 +238,12 @@
 	.download:hover {
 		background-color: #4CD964;
 	}
-	
+
 	.message {
 		position: absolute;
 		width: 90%;
 		top: 80rpx;
-		
+
 		font-size: 35rpx;
 	}
 </style>
