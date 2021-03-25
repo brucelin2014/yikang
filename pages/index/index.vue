@@ -94,15 +94,14 @@
 				})
 			},
 			download: function() {
-				uni.showToast({
-					icon: 'none',
-					title: 'Please look forward.'
-				})
+				uni.navigateTo({
+					url: '../download/download'
+				});
 			},
 			onNavigationBarButtonTap: function(e) {
 				//console.log(e.text);
 				//console.log(e.fontSize);
-				//console.log(e.index);
+				console.log(e.index);
 				switch (e.index) {
 					case 0:
 						uni.navigateTo({
@@ -112,6 +111,10 @@
 					case 1:
 						uni.navigateTo({
 							url: '../share/share'
+						});
+					case 2:
+						uni.navigateTo({
+							url: '../download/download'
 						});
 						break;
 					default:

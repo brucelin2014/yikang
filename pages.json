@@ -53,16 +53,21 @@
 			"enablePullDownRefresh": false
 		}
 
-	}    ,{
-            "path" : "pages/share/share",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "Share",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-    ],
+	}, {
+		"path": "pages/share/share",
+		"style": {
+			"navigationBarTitleText": "Share",
+			"enablePullDownRefresh": false
+		}
+
+	}, {
+		"path": "pages/download/download",
+		"style": {
+			"navigationBarTitleText": "Download",
+			"enablePullDownRefresh": false
+		}
+
+	}],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "yikang",
