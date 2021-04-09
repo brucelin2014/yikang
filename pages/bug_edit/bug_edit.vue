@@ -89,7 +89,8 @@
 			
 			<view class="uni-list-cell">
 				<view class="uni-list-cell-left"></view>
-				<image v-for="(item, index) in attachments" :key="index" :src="item.fileID != '' ? item.fileID : item.tempFilePath" class="img" @click="previewImage(index)"></image>
+				<image v-for="(item, index) in attachments" :key="index" :src="item.fileID != '' ? item.fileID : item.tempFilePath" class="img" 
+				@click="previewImage(index)"></image>
 			</view>
 			
 			<view class="uni-list-cell">

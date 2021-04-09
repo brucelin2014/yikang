@@ -13,6 +13,10 @@
 				<td style="padding: 10rpx;" :class="getStatusClass(getStatusIndex(item.status))">{{item.status}}</td>
 				<td style="padding: 10rpx;">{{$datetime.substrDate(item.last_modified_date)}}</td>
 				<td style="padding: 10rpx;">{{item.title}}</td>
+				<td style="height: 90rpx; padding-top: 5rpx;">
+					<image v-for="(img, id) in item.attachments" :key="id" :src="img.fileID" class="img" 
+					@click.stop="previewImage(item.attachments, id)"></image>
+				</td>
 			</tr>
 		</table>
 
@@ -34,7 +38,7 @@
 	export default {
 		data() {
 			return {
-				arrHeader: ['编号', '分类', '严重性', '状态', '最后更新', '摘要'],
+				arrHeader: ['编号', '分类', '严重性', '状态', '最后更新', '摘要', '图片'],
 				project: '',
 				arrData: [],
 				// 问题状态
@@ -125,6 +129,16 @@
 				uni.navigateTo({
 					url: '../bug_edit/bug_edit?page=' + this.project + '&item=' + null
 				});
+			},
+			previewImage: function(attachments, index) {
+				var arr = [];
+				for (var i=0; i<attachments.length; i++) {
+					arr.push(attachments[i].fileID);
+				}
+				uni.previewImage({
+					urls: arr,
+					current: index
+				});
 			}
 
 		}
@@ -197,5 +211,12 @@
 
 	.new:hover {
 		background-color: #4CD964;
+	}
+	
+	.img {
+		width: 90rpx;
+		height: 90rpx;
+		border-radius: 5rpx;
+		margin-right: 10rpx;
 	}
 </style>
