@@ -361,6 +361,8 @@
 				
 				for (let i=0; i<size; i++) {
 					let attachment = that.attachments[i];
+					console.log(i + ", uploadFile " + attachment.fileID);
+					
 					// 排除已上传文件
 					if (attachment.fileID != '') {
 						if (i == size - 1) {
@@ -378,7 +380,7 @@
 								if (e.success) {
 									//console.log(i + ", " + size);
 									attachment.fileID = e.fileID;
-									//console.log(JSON.stringify(attachment));
+									console.log("uploadFile " + JSON.stringify(attachment));
 									that.bug.attachments.push(attachment);
 									if (i == size - 1) {
 										if (callback)
