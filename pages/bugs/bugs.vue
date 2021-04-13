@@ -1,6 +1,6 @@
 <template>
 	<view class="container">
-		<table width="100%" cellpadding="0" cellspacing="0">
+		<table width="100%" cellpadding="0" cellspacing="0" v-if="isLandscape">
 			<tr>
 				<th v-for="(item,index) in arrHeader" :key="index" class="header">
 					{{item}}
@@ -13,6 +13,26 @@
 				<td style="padding: 10rpx;" :class="getStatusClass(getStatusIndex(item.status))">{{item.status}}</td>
 				<td style="padding: 10rpx;">{{$datetime.substrDate(item.last_modified_date)}}</td>
 				<td style="padding: 10rpx;">{{item.title}}</td>
+				<td style="height: 90rpx; padding-top: 5rpx;">
+					<image v-for="(img, id) in item.attachments" :key="id" :src="img.fileID" class="img" 
+					@click.stop="previewImage(item.attachments, id)"></image>
+				</td>
+			</tr>
+		</table>
+		<table width="100%" cellpadding="0" cellspacing="0" v-else>
+			<tr v-for="(item,index) in arrData" :key="index" :class="index % 2 == 0 ? 'content' : 'content2'" @click="edit(item)">
+				<td style="padding: 10rpx;">
+					{{item.number}}
+					<view :class="getStatusClass(getStatusIndex(item.status))">
+						{{item.status}}
+					</view>
+				</td>
+				<td style="padding: 10rpx; text-align: left; padding-left: 20rpx;">
+					{{item.title}}
+					<view style="color: #999999;">
+						{{$datetime.substrDate(item.last_modified_date)}}
+					</view>
+				</td>
 				<td style="height: 90rpx; padding-top: 5rpx;">
 					<image v-for="(img, id) in item.attachments" :key="id" :src="img.fileID" class="img" 
 					@click.stop="previewImage(item.attachments, id)"></image>
