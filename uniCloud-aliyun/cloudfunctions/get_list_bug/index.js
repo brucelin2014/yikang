@@ -25,7 +25,7 @@ exports.main = async (event, context) => {
 	}
 
 	//查询指定字段的一条记录
-	let res = await collection.where(filter).skip((pageIndex - 1) * pageSize).limit(pageSize).orderBy("last_modified_date", "desc").get(); // asc / desc
+	let res = await collection.where(filter).skip((pageIndex - 1) * pageSize).limit(pageSize).orderBy("created_date", "desc").get(); // asc / desc
 	//console.log("get " + JSON.stringify(res));
 
 	//返回数据给客户端
