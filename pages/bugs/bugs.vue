@@ -1,5 +1,20 @@
 <template>
 	<view class="container">
+		<view style="display: flex; align-items: center;">
+			<view style="padding: 20rpx;">
+				状态筛选：
+			</view>
+			<view class="uni-list">
+				<view class="uni-list-cell">
+					<view class="uni-list-cell-db">
+						<picker @change="bindPickerChange" :value="status_index" :range="arrStatus2">
+							<view :class="getStatusClass(status_index)" style="border: solid #3F536E 1rpx; border-radius: 10rpx; padding: 10rpx;">{{arrStatus2[status_index]}}</view>
+						</picker>
+					</view>
+				</view>
+			</view>
+		</view>
+				
 		<table width="100%" cellpadding="0" cellspacing="0" v-if="isLandscape">
 			<tr>
 				<th v-for="(item,index) in arrHeader" :key="index" class="header">
@@ -58,16 +73,19 @@
 	export default {
 		data() {
 			return {
+				status_index: 0,
 				arrHeader: ['编号', '分类', '严重性', '状态', '最后更新', '摘要', '图片'],
 				project: '',
 				arrData: [],
 				// 问题状态
 				arrStatus: ['新建', '反馈', '认可/公认', '已确认', '已分派', '已解决', '已关闭'],
+				arrStatus2: ['新建', '反馈', '认可/公认', '已确认', '已分派', '已解决', '已关闭', '全部'],
 				isLandscape: false // 是否横屏
 			}
 		},
 		onLoad(option) {
 			this.project = option.page;
+			
 			if (option.page != 'null') {
 				uni.setNavigationBarTitle({
 					title: 'Bug Tracker [' + option.page + ']'
@@ -84,7 +102,10 @@
 		},
 		onShow: function() {
 			console.log('App Show');
-			this.loadDataOnLine(1, 100);
+			if (this.status_index == 7)
+				this.loadDataOnLine(1, 100);
+			else
+				this.loadDataOnLine2(1, 100);
 		},
 		methods: {
 			edit: function(item) {
@@ -117,6 +138,32 @@
 				});
 				uni.showLoading();
 			},
+			// 查找云端数据
+			loadDataOnLine2: function(pageIndex, pageSize) {
+				var that = this;
+				uniCloud.callFunction({
+					name: "get_list_bug",
+					data: {
+						pageIndex: pageIndex,
+						pageSize: pageSize,
+						filter: {
+							"project": that.project,
+							"status": that.arrStatus2[that.status_index]
+						}
+					},
+					success(res) {
+						that.arrData = res.result.data;
+						//console.log(JSON.stringify(that.arrData));
+					},
+					fail(e) {
+						console.error(e);
+					},
+					complete() {
+						uni.hideLoading();
+					}
+				});
+				uni.showLoading();
+			},
 			getStatusClass: function(index) {
 				switch (index) {
 					case 0:
@@ -133,6 +180,8 @@
 						return 'status_resolved';
 					case 6:
 						return 'status_closed';
+					case 7:
+						return 'status_all';
 					default:
 						return 'status_new';
 				}
@@ -159,6 +208,13 @@
 					urls: arr,
 					current: index
 				});
+			},
+			bindPickerChange: function(e) {
+				this.status_index = e.target.value;
+				if (this.status_index == 7)
+					this.loadDataOnLine(1, 100);
+				else
+					this.loadDataOnLine2(1, 100);
 			}
 
 		}

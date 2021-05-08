@@ -42,4 +42,8 @@
 		color: #babdb6;
 		/*grey*/
 	}
+	.status_all {
+		color: #000000;
+		/*red*/
+	}
 </style>
