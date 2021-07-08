@@ -56,7 +56,7 @@
 			return {
 				user: '',
 				windowHeight: 0,
-				arrProduct: ['A3', 'A4', 'A7', 'ES1', 'SL4'],
+				arrProduct: ['A3', 'A4', 'A7', 'ES1', 'SL4', 'DES'],
 				settings: {
 					download_path: '',
 					version: '',
@@ -77,10 +77,16 @@
 		},
 		methods: {
 			goto: function(page) {
-				//console.log(page);
-				uni.navigateTo({
-					url: '../bugs/bugs?page=' + page
-				});
+				console.log(page);
+				if (page == 'DES') {
+					uni.navigateTo({
+						url: '../devices/devices?page=' + page
+					});
+				} else {
+					uni.navigateTo({
+						url: '../bugs/bugs?page=' + page
+					});
+				}
 			},
 			add: function() {
 				uni.navigateTo({

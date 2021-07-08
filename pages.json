@@ -33,12 +33,26 @@
 			}
 		}
 	}, {
+		"path": "pages/devices/devices",
+		"style": {
+			"navigationBarTitleText": "Devices",
+			"enablePullDownRefresh": false
+		}
+		
+	}, {
+		"path": "pages/device_edit/device_edit",
+		"style": {
+			"navigationBarTitleText": "Device Edit",
+			"enablePullDownRefresh": false
+		}
+
+	}, {
 		"path": "pages/bugs/bugs",
 		"style": {
 			"navigationBarTitleText": "Bug Tracker",
 			"enablePullDownRefresh": false
 		}
-
+	
 	}, {
 		"path": "pages/bug_edit/bug_edit",
 		"style": {
