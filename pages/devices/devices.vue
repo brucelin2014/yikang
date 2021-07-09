@@ -1,20 +1,5 @@
 <template>
-	<view class="container">
-		<view style="display: flex; align-items: center;">
-			<view style="padding: 20rpx;">
-				状态筛选：
-			</view>
-			<view class="uni-list">
-				<view class="uni-list-cell">
-					<view class="uni-list-cell-db">
-						<picker @change="bindPickerChange" :value="status_index" :range="arrStatus2">
-							<view :class="getStatusClass(status_index)" style="border: solid #3F536E 1rpx; border-radius: 10rpx; padding: 10rpx;">{{arrStatus2[status_index]}}</view>
-						</picker>
-					</view>
-				</view>
-			</view>
-		</view>
-				
+	<view class="container">	
 		<table width="100%" cellpadding="0" cellspacing="0" v-if="isLandscape">
 			<tr>
 				<th v-for="(item,index) in arrHeader" :key="index" class="header">
@@ -22,35 +7,32 @@
 				</th>
 			</tr>
 			<tr v-for="(item,index) in arrData" :key="index" :class="index % 2 == 0 ? 'content' : 'content2'" @click="edit(item)">
-				<td style="padding: 10rpx;">{{item.number}}</td>
-				<td style="padding: 10rpx;">{{item.type}}</td>
-				<td style="padding: 10rpx;">{{item.ponderance}}</td>
-				<td style="padding: 10rpx;" :class="getStatusClass(getStatusIndex(item.status))">{{item.status}}</td>
+				<td style="padding: 10rpx;">{{item.name}}</td>
+				<td style="padding: 10rpx;">{{item.serial_number}}</td>
+				<td style="padding: 10rpx;">{{item.mac}}</td>
+				<td style="padding: 10rpx;">{{item.ip_address}}</td>
+				<td style="padding: 10rpx;">{{item.available_space}}</td>
+				
+				<td style="padding: 10rpx;">{{$datetime.substrDate(item.registration_date)}}</td>
+				<td style="padding: 10rpx;" :class="getStatusClass(getStatusIndex(item.available_date))">{{$datetime.substrDate(item.available_date)}}</td>
+				<td style="padding: 10rpx;">{{item.temperature}}</td>
+				<td style="padding: 10rpx;">{{item.humidity}}</td>
 				<td style="padding: 10rpx;">{{$datetime.substrDate(item.last_modified_date)}}</td>
-				<td style="padding: 10rpx;">{{item.title}}</td>
-				<td style="height: 90rpx; padding-top: 5rpx;">
-					<image v-for="(img, id) in item.attachments" :key="id" :src="img.fileID" class="img" 
-					@click.stop="previewImage(item.attachments, id)"></image>
-				</td>
 			</tr>
 		</table>
 		<table width="100%" cellpadding="0" cellspacing="0" v-else>
 			<tr v-for="(item,index) in arrData" :key="index" :class="index % 2 == 0 ? 'content' : 'content2'" @click="edit(item)">
 				<td style="padding: 10rpx;">
-					{{item.number}}
-					<view :class="getStatusClass(getStatusIndex(item.status))">
-						{{item.status}}
+					{{item.name}}
+					<view :class="getStatusClass(getStatusIndex(item.available_date))">
+						{{$datetime.substrDate(item.available_date)}}
 					</view>
 				</td>
 				<td style="padding: 10rpx; text-align: left; padding-left: 20rpx;">
-					{{item.title}}
+					{{item.serial_number}}
 					<view style="color: #999999;">
-						{{$datetime.substrDate(item.last_modified_date)}}
+						{{item.ip_address}}
 					</view>
-				</td>
-				<td style="height: 90rpx; padding-top: 5rpx;">
-					<image v-for="(img, id) in item.attachments" :key="id" :src="img.fileID" class="img" 
-					@click.stop="previewImage(item.attachments, id)"></image>
 				</td>
 			</tr>
 		</table>
@@ -73,13 +55,11 @@
 	export default {
 		data() {
 			return {
-				status_index: 0,
-				arrHeader: ['编号', '分类', '严重性', '状态', '最后更新', '摘要', '图片'],
+				arrHeader: ['设备名称', '硬盘序列号', '网卡序列号', 'ip地址', '可用空间',
+				 '注册日期', '有效日期', '温度', '湿度', '最后更新'],
 				project: '',
 				arrData: [],
-				// 问题状态
 				arrStatus: ['新建', '反馈', '认可/公认', '已确认', '已分派', '已解决', '已关闭'],
-				arrStatus2: ['新建', '反馈', '认可/公认', '已确认', '已分派', '已解决', '已关闭', '全部'],
 				isLandscape: false // 是否横屏
 			}
 		},
@@ -88,7 +68,7 @@
 			
 			if (option.page != 'null') {
 				uni.setNavigationBarTitle({
-					title: 'Bug Tracker [' + option.page + ']'
+					title: 'Devices'
 				})
 			}
 			//this.loadDataOnLine(1, 100);
@@ -102,53 +82,24 @@
 		},
 		onShow: function() {
 			console.log('App Show');
-			if (this.status_index == 7)
-				this.loadDataOnLine(1, 100);
-			else
-				this.loadDataOnLine2(1, 100);
+			this.loadDataOnLine(1, 100);
 		},
 		methods: {
 			edit: function(item) {
 				uni.navigateTo({
-					url: '../bug_edit/bug_edit?page=' + item.project + '&item=' + encodeURIComponent(JSON.stringify(item))
+					url: '../device_edit/device_edit?page=' + item.project + '&item=' + encodeURIComponent(JSON.stringify(item))
 				});
 			},
 			// 查找云端数据
 			loadDataOnLine: function(pageIndex, pageSize) {
 				var that = this;
 				uniCloud.callFunction({
-					name: "get_list_bug",
+					name: "get_list_device",
 					data: {
 						pageIndex: pageIndex,
 						pageSize: pageSize,
 						filter: {
-							"project": that.project
-						}
-					},
-					success(res) {
-						that.arrData = res.result.data;
-						//console.log(JSON.stringify(that.arrData));
-					},
-					fail(e) {
-						console.error(e);
-					},
-					complete() {
-						uni.hideLoading();
-					}
-				});
-				uni.showLoading();
-			},
-			// 查找云端数据
-			loadDataOnLine2: function(pageIndex, pageSize) {
-				var that = this;
-				uniCloud.callFunction({
-					name: "get_list_bug",
-					data: {
-						pageIndex: pageIndex,
-						pageSize: pageSize,
-						filter: {
-							"project": that.project,
-							"status": that.arrStatus2[that.status_index]
+							"project": null
 						}
 					},
 					success(res) {
@@ -196,26 +147,9 @@
 			},
 			add: function() {
 				uni.navigateTo({
-					url: '../bug_edit/bug_edit?page=' + this.project + '&item=' + null
+					url: '../device_edit/device_edit?page=' + this.project + '&item=' + null
 				});
 			},
-			previewImage: function(attachments, index) {
-				var arr = [];
-				for (var i=0; i<attachments.length; i++) {
-					arr.push(attachments[i].fileID);
-				}
-				uni.previewImage({
-					urls: arr,
-					current: index
-				});
-			},
-			bindPickerChange: function(e) {
-				this.status_index = e.target.value;
-				if (this.status_index == 7)
-					this.loadDataOnLine(1, 100);
-				else
-					this.loadDataOnLine2(1, 100);
-			}
 
 		}
 

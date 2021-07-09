@@ -32,7 +32,9 @@
 			</view>
 			<view class="uni-list-cell">
 				<view class="uni-list-cell-left">有效日期</view>
-				<view class="uni-list-cell-db">{{$datetime.substrDate(device.available_date)}}</view>
+				<view class="uni-list-cell-db">
+					<uni-datetime-picker type="date" :value="available_date" @change="change" />
+				</view>
 			</view>
 			
 			<view class="uni-list-cell">
@@ -84,8 +86,7 @@
 					created_date: '',
 					last_modified_date: '',
 				},
-				
-				status_class: 'uni-input'
+				available_date: ''
 			}
 		},
 		onLoad(option) {
@@ -94,7 +95,10 @@
 			if (option.item != 'null' && option.item != undefined) {
 				//console.log(decodeURIComponent(option.item));
 				this.device = JSON.parse(decodeURIComponent(option.item));
-				//this.status_class = this.getStatusClass(this.getStatusIndex(this.device.status));
+				
+				setTimeout(() => {
+					this.available_date = this.device.available_date;
+				}, 100);
 			}
 		},
 		methods: {
@@ -106,89 +110,71 @@
 				this.device.available_space = "";
 				
 				this.device.registration_date = this.$datetime.dateFormat("YYYY-mm-dd HH:MM:SS", new Date());
-				this.device.available_date = this.$datetime.dateFormat("YYYY-mm-dd HH:MM:SS", new Date());
+				this.available_date = this.$datetime.dateFormat("YYYY-mm-dd HH:MM:SS", this.addDate(new Date(), 365));
+				this.device.available_date = this.available_date;
 				this.device.temperature = "";
 				this.device.humidity = "";
 				
 				this.device._id = "";
 				this.device.created_date = this.$datetime.dateFormat("YYYY-mm-dd HH:MM:SS", new Date());
 				this.device.last_modified_date = this.$datetime.dateFormat("YYYY-mm-dd HH:MM:SS", new Date());
-				
-				this.status_class = this.getStatusClass(0);
 			},
 			save: function(e) {
 				var that = this;
 				if (that.device._id == '')
 					that.device.created_date = that.$datetime.dateFormat("YYYY-mm-dd HH:MM:SS", new Date());
 				that.device.last_modified_date = that.$datetime.dateFormat("YYYY-mm-dd HH:MM:SS", new Date());
-				that.uploadFile(function() {
-					//console.log(JSON.stringify(that.device));
-					uniCloud.callFunction({
-						name: "add_device",
-						data: {
-							name: that.device.name,
-							serial_number: that.device.serial_number,
-							mac: that.device.mac,
-							ip_address: that.device.ip_address,
-							available_space: that.device.available_space,
-							
-							registration_date: that.device.registration_date,
-							available_date: that.device.available_date,
-							temperature: that.device.temperature,
-							humidity: that.device.humidity,
-							
-							_id: that.device._id,
-							created_date: that.device.created_date,
-							last_modified_date: that.device.last_modified_date
-						},
-						success(res) {
-							if (that.device._id == '')
-								that.device._id = res.result.data;
-							uni.showToast({
-								title:"Submit successful.",
-								icon:'none'
-							})
-						},
-						fail(e) {
-							console.error(e);
-						},
-						complete() {
-							uni.hideLoading();
-						}
-					});
-					uni.showLoading();
-				})
+
+				//console.log(JSON.stringify(that.device));
+				uniCloud.callFunction({
+					name: "add_device",
+					data: {
+						name: that.device.name,
+						serial_number: that.device.serial_number,
+						mac: that.device.mac,
+						ip_address: that.device.ip_address,
+						available_space: that.device.available_space,
+						
+						registration_date: that.device.registration_date,
+						available_date: that.device.available_date,
+						temperature: that.device.temperature,
+						humidity: that.device.humidity,
+						
+						_id: that.device._id,
+						created_date: that.device.created_date,
+						last_modified_date: that.device.last_modified_date
+					},
+					success(res) {
+						if (that.device._id == '')
+							that.device._id = res.result.data;
+						uni.showToast({
+							title:"Submit successful.",
+							icon:'none'
+						})
+					},
+					fail(e) {
+						console.error(e);
+					},
+					complete() {
+						uni.hideLoading();
+					}
+				});
+				uni.showLoading();
 			},
 			clear: function(e) {
 				this.init();
 			},
-			getStatusClass: function(index) {
-				switch (index){
-					case 0:
-						return 'status_new';
-					case 1:
-						return 'status_feedback';
-					case 2:
-						return 'status_acknowledged';
-					case 3:
-						return 'status_confirmed';
-					case 4:
-						return 'status_assigned';
-					case 5:
-						return 'status_resolved';
-					case 6:
-						return 'status_closed';
-					default:
-						return 'status_new';
-				}
+			change(e) {
+				this.available_date = e + " 23:59:59";
+				this.device.available_date = this.available_date;
 			},
-			getStatusIndex: function(status) {
-				var size = this.arrStatus.length;
-				for (var i=0; i<size; i++) {
-					if (this.arrStatus[i] == status)
-						return i;
+			addDate(date, days) {
+				if (days == undefined || days == '') {
+					days = 1;
 				}
-				return 0;
+				var date = new Date(date);
+				date.setDate(date.getDate() + days);
+				return date;
 			}
 			
 		}
