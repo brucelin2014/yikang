@@ -2,6 +2,7 @@
 	<view class="container" :style="{'height': windowHeight}">
 		<marquee class="message" behavior="scroll">{{settings.message}}</marquee>
 
+		<!-- 手机版 -->
 		<match-media :max-width="800" style="display: flex; justify-content: center; align-items: center;">
 			<view class="products">
 				<view v-for="(item,index) in arrProduct" :key="index" class="product_item_mobile" @click="goto(item)">
@@ -10,6 +11,7 @@
 			</view>
 		</match-media>
 
+		<!-- 电脑版 -->
 		<match-media :min-width="800" style="display: flex; justify-content: center; align-items: center; width: 100%; height: 50%;">
 			<view class="products">
 				<view v-for="(item,index) in arrProduct" :key="index" class="product_item" @click="goto(item)">
@@ -56,7 +58,7 @@
 			return {
 				user: '',
 				windowHeight: 0,
-				arrProduct: ['A3', 'A4', 'A7', 'ES1', 'SL4', 'DES'],
+				arrProduct: ['A2', 'A3', 'A4', 'A5', 'A7', 'ES1', 'SL4', 'DES'],
 				settings: {
 					download_path: '',
 					version: '',
@@ -181,8 +183,8 @@
 		width: 150rpx;
 		height: 150rpx;
 		border-radius: 100%;
-		margin: 30rpx;
-		padding: 30rpx;
+		margin: 25rpx;
+		padding: 25rpx;
 		background-color: #FFFFFF;
 	}
 
