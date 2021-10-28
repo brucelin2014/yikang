@@ -180,7 +180,7 @@
 				attachments: [],
 				
 				// 项目
-				arrProduct: ['A4', 'A7', 'ES1', 'SL4'],
+				arrProduct: ['A2', 'A3', 'A4', 'A5', 'A7', 'ES1', 'SL4'],
 				// 類型
 				arrType: ['中文简体', '中文繁體', 'English'],
 				// 出现频率
